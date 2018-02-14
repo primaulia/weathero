@@ -1,44 +1,61 @@
 import React, { Component } from 'react'
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col, Input, Button, Form, FormGroup } from 'reactstrap'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+
 import '../styles/App.css'
 
 class App extends Component {
-  constructor() {
-    super()
-    // this.state = {
-    //   currently: {},
-    //   timezone: ''
-    // }
+  _handleLatitude = (e) => {
+    this.setState({
+      longitude: e.target.value
+    })
   }
 
-  // _convertToCelcius(degree) {
-  //   const celcius = ((degree - 32) * 5) / 9
-  //   return Math.round(celcius)
-  // }
+  _handleLongitude = (e) => {
+    this.setState({
+      latitude: e.target.value
+    })
+  }
 
-  render() {
-    // if (!this.state.timezone) {
-    //   return (
-    //     <Container>
-    //       Loading...
-    //     </Container>
-    //   )
-    // }
+  _handleSubmit = async (e) => {
+    e.preventDefault()
+    const { latitude: lat, longitude: long } = this.state
+    this.props.data.refetch({
+      variables: { lat, long },
+    })
+  }
 
-    let {currently, timezone} = this.state
-    let {summary, temperature, apparentTemperature, uvIndex, humidity} = currently
+  render () {
+    console.log(this.props)
+    const {data} = this.props
+    if (data && data.loading) {
+      return (
+        <Container>
+          <h1>Loading...</h1>
+        </Container>
+      )
+    }
+
+    if (data && data.error) {
+      return <Container>
+        <h1>{data.error.message}.</h1>
+      </Container>
+    }
+
+    let {summary, temperature, apparentTemperature, uvIndex, humidity, timezone} = data.now_weather
 
     return (
-      <div className="App">
-        <header className="App-header">
+      <div className='App'>
+        <header className='App-header'>
           <Container>
-            <h1 className="App-title">Welcome to React</h1>
+            <h1 className='App-title'>Weatherooooo</h1>
           </Container>
         </header>
-        <Container className="main">
+        <Container className='main'>
           <Row>
-            <Col sm="12" md={{ size: 6, offset: 3 }}>
-              <h2 className="display-4">{timezone} is {summary}</h2>
+            <Col sm='12' md={{ size: 6, offset: 3 }}>
+              <h2 className='display-4'>{timezone} is {summary}</h2>
               <dl>
                 <dt>Temperature</dt>
                 <dd>{temperature}&deg;C (but feels like {apparentTemperature}&deg;C)</dd>
@@ -49,25 +66,44 @@ class App extends Component {
               </dl>
             </Col>
           </Row>
+          <Row>
+            <Col sm='12' md={{ size: 6, offset: 3 }}>
+              <Form inline onSubmit={this._handleSubmit}>
+                <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                  <Input type="text"
+                    name="longitude"
+                    placeholder="Longitude"
+                    onChange={this._handleLongitude}
+                  />
+                </FormGroup>
+                <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                  <Input type="text"
+                    name="latitude"
+                    placeholder="Latitude"
+                    onChange={this._handleLatitude}
+                  />
+                </FormGroup>
+                <Button>Search</Button>
+              </Form>
+            </Col>
+          </Row>
         </Container>
       </div>
-    );
+    )
   }
-
-  // componentDidMount = async () => {
-  //   const API_URL = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/30d7debaeabdcdba68fce0dbd85769a2/1.352083,103.819836'
-  //   const response = await fetch(API_URL)
-  //   const { currently, timezone } = await response.json()
-  //
-  //   console.log( currently, timezone )
-  //
-  //   this.setState({
-  //     currently,
-  //     timezone
-  //   })
-  // }
 }
 
-// run graphql query«»
+const WEATHER_QUERY = gql`
+  query NowWeather {
+    now_weather {
+      temperature
+      apparentTemperature
+      summary
+      uvIndex
+      humidity
+      timezone
+    }
+  }
+`
 
-export default App;
+export default graphql(WEATHER_QUERY)(App)
