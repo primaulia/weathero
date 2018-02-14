@@ -5,25 +5,25 @@ import '../styles/App.css'
 class App extends Component {
   constructor() {
     super()
-    this.state = {
-      currently: {},
-      timezone: ''
-    }
+    // this.state = {
+    //   currently: {},
+    //   timezone: ''
+    // }
   }
 
-  _convertToCelcius(degree) {
-    const celcius = ((degree - 32) * 5) / 9
-    return Math.round(celcius)
-  }
+  // _convertToCelcius(degree) {
+  //   const celcius = ((degree - 32) * 5) / 9
+  //   return Math.round(celcius)
+  // }
 
   render() {
-    if (!this.state.timezone) {
-      return (
-        <Container>
-          Loading...
-        </Container>
-      )
-    }
+    // if (!this.state.timezone) {
+    //   return (
+    //     <Container>
+    //       Loading...
+    //     </Container>
+    //   )
+    // }
 
     let {currently, timezone} = this.state
     let {summary, temperature, apparentTemperature, uvIndex, humidity} = currently
@@ -41,7 +41,7 @@ class App extends Component {
               <h2 className="display-4">{timezone} is {summary}</h2>
               <dl>
                 <dt>Temperature</dt>
-                <dd>{this._convertToCelcius(temperature)}&deg;C (but feels like {this._convertToCelcius(apparentTemperature)}&deg;C)</dd>
+                <dd>{temperature}&deg;C (but feels like {apparentTemperature}&deg;C)</dd>
                 <dt>UV Index</dt>
                 <dd>{uvIndex}</dd>
                 <dt>Humidity</dt>
@@ -54,18 +54,20 @@ class App extends Component {
     );
   }
 
-  componentDidMount = async () => {
-    const API_URL = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/30d7debaeabdcdba68fce0dbd85769a2/1.352083,103.819836'
-    const response = await fetch(API_URL)
-    const { currently, timezone } = await response.json()
-
-    console.log( currently, timezone )
-
-    this.setState({
-      currently,
-      timezone
-    })
-  }
+  // componentDidMount = async () => {
+  //   const API_URL = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/30d7debaeabdcdba68fce0dbd85769a2/1.352083,103.819836'
+  //   const response = await fetch(API_URL)
+  //   const { currently, timezone } = await response.json()
+  //
+  //   console.log( currently, timezone )
+  //
+  //   this.setState({
+  //     currently,
+  //     timezone
+  //   })
+  // }
 }
+
+// run graphql query«»
 
 export default App;
