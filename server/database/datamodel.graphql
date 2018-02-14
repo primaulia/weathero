@@ -4,11 +4,3 @@ type Post {
   title: String!
   text: String!
 }
-
-type Weather {
-  temperature: Float!
-  apparentTemperature: Float!
-  summary: String!
-  uvIndex: Int!
-  humidity: Float!
-}

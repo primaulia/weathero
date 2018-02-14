@@ -12,3 +12,12 @@ type Mutation {
   deletePost(id: ID!): Post
   publish(id: ID!): Post
 }
+
+type Weather {
+  temperature: Float!
+  apparentTemperature: Float!
+  summary: String!
+  uvIndex: Int!
+  humidity: Float!
+  timezone: String!
+}

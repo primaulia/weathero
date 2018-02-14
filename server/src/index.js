@@ -1,10 +1,6 @@
-require("isomorphic-fetch")
-
 const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
 const Query = require('./resolvers/Query')
-const async = require('asyncawait/async');
-const await = require('asyncawait/await');
 
 const resolvers = {
   Query,
